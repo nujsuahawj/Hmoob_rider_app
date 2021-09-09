@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">14808560597-t20b0nl0aq97et2tc4faamrhcm2cdjf7.apps.googleusercontent.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">14808560597</string>
+    <string name="google_api_key" translatable="false">AIzaSyDyV_LRxrZHX8GKMlnNNy4WwAOCmmPzvGA</string>
+    <string name="google_app_id" translatable="false">1:14808560597:android:d83456133f223248ca435c</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDyV_LRxrZHX8GKMlnNNy4WwAOCmmPzvGA</string>
+    <string name="google_storage_bucket" translatable="false">flutter-uber-clone-7f3ef.appspot.com</string>
+    <string name="project_id" translatable="false">flutter-uber-clone-7f3ef</string>
+</resources>

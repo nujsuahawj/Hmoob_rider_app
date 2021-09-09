@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:rider_app/AllScreens/loginScreen.dart';
 import 'package:rider_app/AllScreens/mainscreen.dart';
+import 'package:rider_app/AllWidgets/progressDialog.dart';
 import 'package:rider_app/main.dart';
 
 // ignore: must_be_immutable
@@ -179,11 +180,21 @@ class RegisterationScreen extends StatelessWidget {
   // ignore: unused_field
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   void registerNewUser(BuildContext context) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return ProgressDialog(
+            message: "ກຳລັງປະມວນຜົນ...",
+          );
+        });
+
     final firebaseUser = (await _firebaseAuth
             .createUserWithEmailAndPassword(
                 email: emailTextEditingController.text,
                 password: passwordTextEditingController.text)
             .catchError((errMsg) {
+      Navigator.pop(context);
       dispayToastMessage("Error: " + errMsg.toString(), context);
     }))
         .user;
@@ -202,6 +213,7 @@ class RegisterationScreen extends StatelessWidget {
       Navigator.pushNamedAndRemoveUntil(
           context, MainScreen.idScreen, (route) => false);
     } else {
+      Navigator.pop(context);
       dispayToastMessage("ການລົງທະບຽນມີຄວນຜິດພາບ", context);
     }
   }

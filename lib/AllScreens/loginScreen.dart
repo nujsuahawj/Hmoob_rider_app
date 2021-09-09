@@ -3,6 +3,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:rider_app/AllScreens/registerationScreen.dart';
+import 'package:rider_app/AllWidgets/progressDialog.dart';
 import 'package:rider_app/main.dart';
 
 import 'mainscreen.dart';
@@ -131,12 +132,21 @@ class LoginScreen extends StatelessWidget {
 
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   void loginAndAuthenticateUser(BuildContext context) async {
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return ProgressDialog(
+            message: "ກຳລັງປະມວນຜົນ...",
+          );
+        });
     // ignore: unused_local_variable
     final firebaseUser = (await _firebaseAuth
             .signInWithEmailAndPassword(
                 email: emailTextEditingController.text,
                 password: passwordTextEditingController.text)
             .catchError((errMsg) {
+      Navigator.pop(context);
       dispayToastMessage("Error: " + errMsg.toString(), context);
     }))
         .user;
@@ -148,11 +158,13 @@ class LoginScreen extends StatelessWidget {
               context, MainScreen.idScreen, (route) => false);
           dispayToastMessage("ການເຂົ້າສູ່ລະບົບສຳເລັດແລ້ວ", context);
         } else {
+          Navigator.pop(context);
           _firebaseAuth.signOut();
           dispayToastMessage("ການເຂົ້າສູ່ລະບົບມີຄວນຜິດພາບ", context);
         }
       });
     } else {
+      Navigator.pop(context);
       dispayToastMessage("ການເຂົ້າສູ່ລະບົບມີຄວນຜິດພາບ", context);
     }
   }

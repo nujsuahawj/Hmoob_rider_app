@@ -1,0 +1,4 @@
+#Thu Sep 09 15:00:11 ICT 2021
+base.0=D\:\\Flutter\\rider_app\\build\\app\\intermediates\\dex\\debug\\mergeDexDebug\\classes.dex
+renamed.0=classes.dex
+path.0=classes.dex
