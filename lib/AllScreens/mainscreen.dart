@@ -3,8 +3,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:provider/provider.dart';
+import 'package:rider_app/AllScreens/searchScreen.dart';
 import 'package:rider_app/AllWidgets/Divider.dart';
 import 'package:rider_app/Assistants/assistantMethods.dart';
+import 'package:rider_app/DataHandler/appData.dart';
 
 class MainScreen extends StatefulWidget {
   static const String idScreen = "mainScreen";
@@ -37,7 +40,8 @@ class _MainScreenState extends State<MainScreen> {
     newGoogleMapController
         .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
     // ignore: unused_local_variable
-    String address = await AssistantMethods.searchCoordinateAddress(position);
+    String address =
+        await AssistantMethods.searchCoordinateAddress(position, context);
     print("this is your address" + address);
   }
 
@@ -209,29 +213,37 @@ class _MainScreenState extends State<MainScreen> {
                     SizedBox(
                       height: 20.0,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5.0),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black54,
-                            blurRadius: 6.0,
-                            spreadRadius: 0.5,
-                            offset: Offset(0.7, 0.7),
-                          ),
-                        ],
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Row(
-                          children: [
-                            Icon(Icons.search, color: Colors.blueAccent),
-                            SizedBox(
-                              width: 10.0,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => SeachScreen()));
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(5.0),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black54,
+                              blurRadius: 6.0,
+                              spreadRadius: 0.5,
+                              offset: Offset(0.7, 0.7),
                             ),
-                            Text("ຊອກຫາສະຖານທີ"),
                           ],
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.search, color: Colors.blueAccent),
+                              SizedBox(
+                                width: 10.0,
+                              ),
+                              Text("ຊອກຫາສະຖານທີ"),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -250,6 +262,14 @@ class _MainScreenState extends State<MainScreen> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
+                            // Text(
+                            //     // ignore: unnecessary_null_comparison
+                            //     Provider.of<AppData>(context).pickUpLocation !=
+                            //             null
+                            //         ? Provider.of<AppData>(context)
+                            //             .pickUpLocation
+                            //             .placeName
+                            //         : "ເພີ່ມໃສ່ໜ້າລັກ"),
                             Text("ເພີ່ມໃສ່ໜ້າລັກ"),
                             SizedBox(
                               height: 4.0,
