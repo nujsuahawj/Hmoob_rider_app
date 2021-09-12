@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -6,6 +7,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:rider_app/AllScreens/searchScreen.dart';
 import 'package:rider_app/AllWidgets/Divider.dart';
+import 'package:rider_app/AllWidgets/progressDialog.dart';
 import 'package:rider_app/Assistants/assistantMethods.dart';
 import 'package:rider_app/DataHandler/appData.dart';
 
@@ -214,11 +216,15 @@ class _MainScreenState extends State<MainScreen> {
                       height: 20.0,
                     ),
                     GestureDetector(
-                      onTap: () {
-                        Navigator.push(
+                      onTap: () async {
+                        // ignore: unused_local_variable
+                        var res = await Navigator.push(
                             context,
                             MaterialPageRoute(
                                 builder: (context) => SeachScreen()));
+                        if (res == "obtainDirection") {
+                          await getPlaceDirection();
+                        }
                       },
                       child: Container(
                         decoration: BoxDecoration(
@@ -323,5 +329,29 @@ class _MainScreenState extends State<MainScreen> {
         ],
       ),
     );
+  }
+
+  Future<void> getPlaceDirection() async {
+    // ignore: unused_local_variable
+    var initialPos =
+        Provider.of<AppData>(context, listen: false).pickUpLocation;
+    // ignore: unused_local_variable
+    var finalPos = Provider.of<AppData>(context, listen: false).dropOffLocation;
+    // ignore: unused_local_variable
+
+
+    // var pickUpLaptLng = LatLng(initialPos.latitude, initialPos.longitude);
+    // var dropOffLatpLng = LatLng(finalPos.latitude, finalPos.longitude);
+    
+    showDialog(
+        context: context,
+        builder: (BuildContext context) =>
+            ProgressDialog(message: "plase wait..."));
+    // ignore: unused_local_variable
+    // var details = await AssistantMethods.obtainPlaceDirectionDetails(
+    //     pickUpLaptLng, dropOffLatpLng);
+    Navigator.pop(context);
+    print("this is encoded points::");
+    // print(details!.encodedPoints);
   }
 }

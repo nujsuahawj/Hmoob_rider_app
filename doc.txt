@@ -1,3 +1,5 @@
 - tshuab ios config firebase
 - biuding acout on firebase to developer.google.com
 - zoo lis url ntawm place autocomple tsis tau completed vim tsis taub buiding acout
+- zoo lis tus placeUrl nyob rau hauv searchscreen method viod tsi tau work
+- zoo lis tus directionUrl nyob hauv assistantMethods.dart nws tsis word 
