@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
@@ -12,6 +13,8 @@ import 'package:rider_app/AllWidgets/Divider.dart';
 import 'package:rider_app/AllWidgets/progressDialog.dart';
 import 'package:rider_app/Assistants/assistantMethods.dart';
 import 'package:rider_app/DataHandler/appData.dart';
+import 'package:rider_app/Models/directDetails.dart';
+import 'package:animated_text_kit/animated_text_kit.dart';
 
 class MainScreen extends StatefulWidget {
   static const String idScreen = "mainScreen";
@@ -28,6 +31,8 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   GlobalKey<ScaffoldState> scaffoldKey = new GlobalKey<ScaffoldState>();
 
+  late DirectionDetails tripDirectionDetails;
+
   // ntawm nos yog polyline hauv day 4
   List<LatLng> pLineCoordinates = [];
   Set<Polyline> polylineSet = {};
@@ -41,12 +46,33 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
 
   double rideDetailsContainerHeight = 0;
   double searchContainerHeight = 300.0;
+
+  bool drawerOpen = true;
+
+  get colorizeColors => null;
+  resetApp() {
+    setState(() {
+      drawerOpen = true;
+
+      searchContainerHeight = 300.0;
+      rideDetailsContainerHeight = 0;
+      bottomPaddingOfMap = 230.0;
+
+      polylineSet.clear();
+      markersSet.clear();
+      circlesSet.clear();
+      pLineCoordinates.clear();
+    });
+    locatePosition();
+  }
+
   void displayRideDetailsContainer() async {
     await getPlaceDirection();
     setState(() {
       searchContainerHeight = 0;
       rideDetailsContainerHeight = 240.0;
       bottomPaddingOfMap = 230.0;
+      drawerOpen = false;
     });
   }
 
@@ -73,6 +99,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
   );
   @override
   Widget build(BuildContext context) {
+    var colorizeTextStyle;
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -167,11 +194,15 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
             },
           ),
           Positioned(
-            top: 45.0,
+            top: 38.0,
             left: 22.0,
             child: GestureDetector(
               onTap: () {
-                scaffoldKey.currentState!.openDrawer();
+                if (drawerOpen) {
+                  scaffoldKey.currentState!.openDrawer();
+                } else {
+                  resetApp();
+                }
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -189,7 +220,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                 child: CircleAvatar(
                   backgroundColor: Colors.white,
                   child: Icon(
-                    Icons.menu,
+                    (drawerOpen) ? Icons.menu : Icons.close,
                     color: Colors.black,
                   ),
                   radius: 20.0,
@@ -407,12 +438,25 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
                                         fontFamily: "Brand-Bold"),
                                   ),
                                   Text(
-                                    "10km",
+                                    // ignore: unnecessary_null_comparison
+                                    ((tripDirectionDetails != null)
+                                        ? tripDirectionDetails.distanceText
+                                        : ''),
                                     style: TextStyle(
                                         fontSize: 16.0, color: Colors.grey),
                                   ),
                                 ],
                               ),
+                              Expanded(child: Container()),
+                              // Text(
+                              //   // ignore: unnecessary_null_comparison
+                              //   ((tripDirectionDetails != null)
+                              //       ? '\$${AssistantMethods.calculateFares(tripDirectionDetails)}'
+                              //       : ''),
+                              //   style: TextStyle(
+                              //     fontFamily: "Brand-Bold",
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
@@ -481,6 +525,83 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
               ),
             ),
           ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.0),
+                topRight: Radius.circular(16.0),
+              ),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  spreadRadius: 0.5,
+                  blurRadius: 16.0,
+                  color: Colors.black54,
+                  offset: Offset(0.7, 0.7),
+                ),
+              ],
+            ),
+            height: 250.0,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 12.0,
+                ),
+              ],
+            ),
+          ),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16.0),
+                  topRight: Radius.circular(16.0)),
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(
+                  spreadRadius: 0.5,
+                  blurRadius: 16.0,
+                  color: Colors.black54,
+                  offset: Offset(0.7, 0.7),
+                ),
+              ],
+            ),
+            height: 150.0,
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 12.0,
+                ),
+                // SizedBox(
+                //   width: double.infinity,
+                //   // ignore: deprecated_member_use
+                //   child: ColorizeAnimatedTextKit(
+                //     onTap: () {
+                //       print("Tap Event");
+                //     },
+                //     text: [
+                //       "Requestinga dide...",
+                //       "Please wait...",
+                //       "Finding a driver",
+                //     ],
+                //     textStyle: TextStyle(
+                //       fontSize: 55.0,
+                //       fontFamily: "Band-Bold",
+                //     ),
+                //     colors: [
+                //       Colors.green,
+                //       Colors.purple,
+                //       Colors.pink,
+                //       Colors.blue,
+                //       Colors.yellow,
+                //       Colors.red,
+                //     ],
+                //     textAlign: TextAlign.center,
+                //     // alignment: AlignmentDirectional.topStart,
+                //   ),
+                // ),
+              ],
+            ),
+          ),
         ],
       ),
     );
@@ -504,6 +625,9 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
     // ignore: unused_local_variable
     // var details = await AssistantMethods.obtainPlaceDirectionDetails(
     //     pickUpLaptLng, dropOffLatpLng);
+    setState(() {
+      // tripDirectionDetails = details;
+    });
     Navigator.pop(context);
     print("this is encoded points::");
     // print(details!.encodedPoints);
@@ -540,6 +664,7 @@ class _MainScreenState extends State<MainScreen> with TickerProviderStateMixin {
       polylineSet.add(polyline);
     });
 
+    // ignore: unused_local_variable
     LatLngBounds latLngBounds;
     // if (pickUpLatLng.latitude > dropOffLatLng.latitude &&
     //     pickUpLatLng.longitude > dropOffLatLng.longitude) {

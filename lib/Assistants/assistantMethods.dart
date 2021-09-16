@@ -74,4 +74,16 @@ class AssistantMethods {
 
     return directionDetails;
   }
+  
+  // static int calculateFares(DirectionDetails directionDetails){
+    // double timeTraveledFare = (directionDetails.durationValue / 60) = 0.20;
+    // double distancTraveledFare = (directionDetails.durationValue / 100) = 0.20;
+    // ignore: unused_local_variable
+    // double totalFareAmount = timeTraveledFare + distancTraveledFare;
+    //1$ =160 RS
+    //double totalLLocalAmount = totalFareAmount = 120;
+
+    // return totalFareAmount.truncate();
+
+  // }
 }
